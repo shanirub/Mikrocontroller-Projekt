@@ -74,8 +74,8 @@ void setup() {
 void loop() {
   // led blink testing
   digitalWrite(LED_BUILTIN, LOW);   // Turn the LED on (Note that LOW is the voltage level)
-  Serial.println("forward");
-  drive_forward();
+  Serial.println("drive_right_backwards()");
+  drive_right_backwards();
   delay(1000);
   digitalWrite(LED_BUILTIN, HIGH);
   Serial.println("stop");
@@ -87,6 +87,7 @@ void loop() {
   
 }
 
+// working as expected
 void stop_driving(){
   digitalWrite(motorLF, LOW);
   digitalWrite(motorRF, LOW);
@@ -94,6 +95,7 @@ void stop_driving(){
   digitalWrite(motorRB, LOW);
 }
 
+// working as expected
 void drive_forward(){
   digitalWrite(motorLF, HIGH);
   digitalWrite(motorRF, HIGH);
@@ -101,6 +103,8 @@ void drive_forward(){
   digitalWrite(motorRB, LOW);
 }
 
+
+// actually turns right without driving forward
 void drive_backwards(){
   digitalWrite(motorLF, LOW);
   digitalWrite(motorRF, LOW);
@@ -108,6 +112,7 @@ void drive_backwards(){
   digitalWrite(motorRB, HIGH);
 }
 
+// actually drives backwards without turning
 void drive_left_forward(){
   digitalWrite(motorLF, LOW);
   digitalWrite(motorRF, HIGH);
@@ -115,6 +120,7 @@ void drive_left_forward(){
   digitalWrite(motorRB, LOW);
 }
 
+// does nothing
 void drive_right_forward(){
   digitalWrite(motorLF, HIGH);
   digitalWrite(motorRF, LOW);
@@ -122,6 +128,7 @@ void drive_right_forward(){
   digitalWrite(motorRB, LOW);
 }
 
+// does nothing
 void drive_left_backwards(){
   digitalWrite(motorLF, LOW);
   digitalWrite(motorRF, LOW);
@@ -129,6 +136,7 @@ void drive_left_backwards(){
   digitalWrite(motorRB, HIGH);
 }
 
+// does nothing
 void drive_right_backwards(){
   digitalWrite(motorLF, LOW);
   digitalWrite(motorRF, LOW);
