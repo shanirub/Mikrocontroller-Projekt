@@ -16,10 +16,22 @@
 #endif
 
 
-int PWMA=5;//Right side 
-int PWMB=4;//Left side 
-int DA=0;//Right reverse 
-int DB=2;//Left reverse 
+int motorRB=5;//Right side ..motorRB
+int motorRF=4;//Left side  ..motorRF
+int motorLB=0;//Right reverse ..motorLB
+int motorLF=2;//Left reverse ..motorLF
+
+int PWMA=motorRB;
+int PWMB=motorRF;
+int DA=motorLB;
+int DB=motorLF;
+/*
+ * 
+int PWMA=5;//Right side ..motorRB
+int PWMB=4;//Left side  ..motorRF
+int DA=0;//Right reverse ..motorLB
+int DB=2;//Left reverse ..motorLF
+ */
 
 /* Set these to your desired credentials. */
 const char *ssid = APSSID;
@@ -62,19 +74,64 @@ void setup() {
 void loop() {
   // led blink testing
   digitalWrite(LED_BUILTIN, LOW);   // Turn the LED on (Note that LOW is the voltage level)
-  digitalWrite(PWMA, LOW); 
-  digitalWrite(DA, LOW);  
-  digitalWrite(PWMB, HIGH); 
-  digitalWrite(DB, HIGH); 
+  Serial.println("forward");
+  drive_forward();
   delay(1000);
   digitalWrite(LED_BUILTIN, HIGH);
-  digitalWrite(PWMA, HIGH); 
-  digitalWrite(DA, HIGH);  
-  digitalWrite(PWMB, LOW); 
-  digitalWrite(DB, LOW); 
+  Serial.println("stop");
+  stop_driving();
   delay(2000);
 
   // access point handling
   server.handleClient();
   
+}
+
+void stop_driving(){
+  digitalWrite(motorLF, LOW);
+  digitalWrite(motorRF, LOW);
+  digitalWrite(motorLB, LOW);
+  digitalWrite(motorRB, LOW);
+}
+
+void drive_forward(){
+  digitalWrite(motorLF, HIGH);
+  digitalWrite(motorRF, HIGH);
+  digitalWrite(motorLB, LOW);
+  digitalWrite(motorRB, LOW);
+}
+
+void drive_backwards(){
+  digitalWrite(motorLF, LOW);
+  digitalWrite(motorRF, LOW);
+  digitalWrite(motorLB, HIGH);
+  digitalWrite(motorRB, HIGH);
+}
+
+void drive_left_forward(){
+  digitalWrite(motorLF, LOW);
+  digitalWrite(motorRF, HIGH);
+  digitalWrite(motorLB, LOW);
+  digitalWrite(motorRB, LOW);
+}
+
+void drive_right_forward(){
+  digitalWrite(motorLF, HIGH);
+  digitalWrite(motorRF, LOW);
+  digitalWrite(motorLB, LOW);
+  digitalWrite(motorRB, LOW);
+}
+
+void drive_left_backwards(){
+  digitalWrite(motorLF, LOW);
+  digitalWrite(motorRF, LOW);
+  digitalWrite(motorLB, LOW);
+  digitalWrite(motorRB, HIGH);
+}
+
+void drive_right_backwards(){
+  digitalWrite(motorLF, LOW);
+  digitalWrite(motorRF, LOW);
+  digitalWrite(motorLB, HIGH);
+  digitalWrite(motorRB, LOW);
 }
