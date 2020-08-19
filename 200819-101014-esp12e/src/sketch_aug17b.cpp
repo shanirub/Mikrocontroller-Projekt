@@ -17,13 +17,6 @@
 #define DRIVE_MOTOR_DIRECTION D4
 #define STEER_MOTOR_POWER D1 // Motor A
 #define STEER_MOTOR_DIRECTION D3
-#define ROOT_REQUEST 0
-#define BACK_REQUEST 1
-#define FORWARD_REQUEST 2
-#define RIGHT_REQUEST 3
-#define LEFT_REQUEST 4
-#define STOP_DRIVE_REQUEST 5
-#define STOP_TURN_REQUEST 6
 
 // drivePower sets how fast the car goes
 // Can be set between 0 and 1023 (although car probably wont move if values are too low)
@@ -51,12 +44,6 @@ const char *password = APPSK;
 
 ESP8266WebServer server(80);
 
-// method for handling various requests
-void handleRequest(int requestCode) {
-  Serial.print(" request arrived: ");
-  Serial.println(requestCode);
-}
-
 void setup() {
   // establishes an access point
   delay(1000);
@@ -73,31 +60,53 @@ void setup() {
 
   // define request handlers
   server.on("/", []() {
-    handleRequest(ROOT_REQUEST);
+    Serial.println("root request");
   });
 
+  // driving forward, then backwards repeat
   server.on("/back", []() {
-    handleRequest(BACK_REQUEST);
+    Serial.println("back");
+    analogWrite(DRIVE_MOTOR_POWER, drivePower);
+    digitalWrite(DRIVE_MOTOR_DIRECTION, !driveDirection);
+    server.send(200, "text/plain", "back");
   });
 
+  // driving forward, then backwards repeat
   server.on("/forward", []() {
-    handleRequest(FORWARD_REQUEST);
+    Serial.println("forward");
+    analogWrite(DRIVE_MOTOR_POWER, drivePower);
+    digitalWrite(DRIVE_MOTOR_DIRECTION, driveDirection);
+    server.send(200, "text/plain", "forward");
   });
 
+  // WORKING
   server.on("/right", []() {
-    handleRequest(RIGHT_REQUEST);
+    Serial.println("right");
+    analogWrite(STEER_MOTOR_POWER, steeringPower);
+    digitalWrite(STEER_MOTOR_DIRECTION, steerDirection);
+    server.send(200, "text/plain", "right");  
   });
 
+  // WORKING
   server.on("/left", []() {
-    handleRequest(LEFT_REQUEST);
+    Serial.println("left");
+    analogWrite(STEER_MOTOR_POWER, steeringPower);
+    digitalWrite(STEER_MOTOR_DIRECTION, !steerDirection);
+    server.send(200, "text/plain", "left");
   });
 
+  // WORKING
   server.on("/stopDrive", []() { 
-    handleRequest(STOP_DRIVE_REQUEST);
+    Serial.println("driveStop");
+    analogWrite(DRIVE_MOTOR_POWER, 0);
+    server.send(200, "text/plain", "driveStop");
   });
 
+  // WORKING
   server.on("/stopTurning", []() {
-    handleRequest(STOP_TURN_REQUEST);
+    Serial.println("steerStop");
+    analogWrite(STEER_MOTOR_POWER, 0);
+    server.send(200, "text/plain", "steerStop");
   });
 
   server.begin();
