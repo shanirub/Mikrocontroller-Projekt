@@ -11,6 +11,7 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
+#include <ESP8266mDNS.h>
 
 // motors pins
 #define DRIVE_MOTOR_POWER D2 // Motor B
@@ -45,18 +46,54 @@ const char *password = APPSK;
 ESP8266WebServer server(80);
 
 void setup() {
+/*
   // establishes an access point
   delay(1000);
   Serial.begin(115200);
   Serial.println();
   Serial.print("Configuring access point...");
-  /* You can remove the password parameter if you want the AP to be open. */
+  // You can remove the password parameter if you want the AP to be open.
   WiFi.softAP(ssid, password);
 
   // starts a webserver
   IPAddress myIP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
   Serial.println(myIP);
+*/
+
+
+/*
+TEMP wifi for easier debugging
+*/
+
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  delay(100);
+  
+  Serial.begin(115200);
+  WiFi.begin("Kaisernet", "yuvalshani");
+  Serial.println("");
+
+  // Wait for connection
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.print("Connected to ");
+  Serial.println(ssid);
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  if (MDNS.begin("WifiCar")) {
+    Serial.println("MDNS Responder Started");
+  }
+
+
+
+/*
+TEMP END
+*/
 
   // define request handlers
   server.on("/", []() {
@@ -68,6 +105,7 @@ void setup() {
     Serial.println("back");
     analogWrite(DRIVE_MOTOR_POWER, drivePower);
     digitalWrite(DRIVE_MOTOR_DIRECTION, !driveDirection);
+    // digitalWrite(DRIVE_MOTOR_DIRECTION, !driveDirection);
     server.send(200, "text/plain", "back");
   });
 
@@ -76,6 +114,7 @@ void setup() {
     Serial.println("forward");
     analogWrite(DRIVE_MOTOR_POWER, drivePower);
     digitalWrite(DRIVE_MOTOR_DIRECTION, driveDirection);
+    // digitalWrite(DRIVE_MOTOR_DIRECTION, driveDirection);
     server.send(200, "text/plain", "forward");
   });
 
@@ -122,7 +161,7 @@ void setup() {
 }
 
 void loop() {
-  digitalWrite(LED_BUILTIN, LOW);   // Turn the LED on (Note that LOW is the voltage level)
+/*   digitalWrite(LED_BUILTIN, LOW);   // Turn the LED on (Note that LOW is the voltage level)
 
   Serial.println("blink on");
   // drive_right_backwards();
@@ -133,8 +172,7 @@ void loop() {
   Serial.println("blink off");
   // stop_driving();
 
-  delay(2000);
+  delay(2000); */
 
-  // access point handling
   server.handleClient();
 }
