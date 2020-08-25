@@ -1,5 +1,7 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
+#include <ESP8266mDNS.h>
+
 
 extern "C" {
 #include "user_interface.h"
@@ -21,6 +23,13 @@ void setup() {
 Serial.begin(115200);
 
 delay(500);
+
+char _hostname[20];
+uint8_t mac[6];
+WiFi.macAddress(mac);
+sprintf(_hostname, "esp32-%02x%02x%02x%02x%02x%02x", 
+          mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+MDNS.begin(_hostname);
 
 // WPA2 Connection starts here
 // Setting ESP into STATION mode only (no AP mode or dual mode)
