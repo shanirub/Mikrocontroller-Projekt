@@ -6,7 +6,7 @@
  *  3. waits on http requests and starts motors accordingly.
  * 
  */
-
+/*
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
@@ -45,6 +45,52 @@ const char *password = APPSK;
 
 ESP8266WebServer server(80);
 
+char HTML_INDEX[] = R"(
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="col-xs-12"  style="height: 100vh">
+        <div class="row" style="height: 33.33%; padding-top: 1em; padding-bottom:1em">
+          <div class="col-xs-8" ></div>
+          <div class="col-xs-4" style="text-align: center; height: 100%">
+            <button id="drive" type="button" class="btn btn-default" style="height: 100%; width: 100%" onmousedown='makeAjaxCall("forward")' onmouseup='makeAjaxCall("driveStop")' ontouchstart='makeAjaxCall("forward")' ontouchend='makeAjaxCall("driveStop")'>Vorwärts</button>
+          </div>
+        </div>
+        <div class="row" style="height: 33.33%; padding-bottom:1em">
+          <div class="col-xs-4" style="height: 100%; text-align: center">
+            <button id="left" type="button" class="btn btn-default" style="height: 100%; width: 100%" onmousedown='makeAjaxCall("left")' onmouseup='makeAjaxCall("steerStop")' ontouchstart='makeAjaxCall("left")' ontouchend='makeAjaxCall("steerStop")'>Links</button>
+          </div>
+          <div class="col-xs-4" style="height: 100%; text-align: center">
+            <button id="right" type="button" class="btn btn-default" style="height: 100%; width: 100%" onmousedown='makeAjaxCall("right")' onmouseup='makeAjaxCall("steerStop")' ontouchstart='makeAjaxCall("right")' ontouchend='makeAjaxCall("steerStop")'>Recht</button>
+          </div>
+          <div class="col-xs-4" style="height: 100%; text-align: center">
+            <button id="stop" type="button" class="btn btn-default" style="height: 100%; width: 100%" onmousedown='makeAjaxCall("stopDrive")' onmouseup='makeAjaxCall("stopDrive")' ontouchstart='makeAjaxCall("stopDrive")' ontouchend='makeAjaxCall("stopDrive")'>Stopp</button>
+          </div>
+          <div class="col-xs-4" ></div>
+        </div>
+        <div class="row" style="height: 33.33%; padding-bottom:1em">
+          <div class="col-xs-8" ></div>
+          <div class="col-xs-4" style="height: 100%; text-align: center">
+            <button id="back" type="button" class="btn btn-default" style="height: 100%; width: 100%" onmousedown='makeAjaxCall("back")' onmouseup='makeAjaxCall("driveStop")' ontouchstart='makeAjaxCall("back")' ontouchend='makeAjaxCall("driveStop")'>Rückwärts</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script> function makeAjaxCall(url){$.ajax({"url": url})}</script>
+  </body>
+</html>
+)";
+
+
 void setup() {
 /*
   // establishes an access point TEMP REMOVED for testing
@@ -64,7 +110,7 @@ void setup() {
 
 /*
 TEMP wifi for easier debugging
-*/
+
 
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
@@ -91,11 +137,12 @@ TEMP wifi for easier debugging
 
 /*
 TEMP END
-*/
+
 
   // define request handlers
   server.on("/", []() {
     Serial.println("root request");
+    server.send(200, "text/html", HTML_INDEX);
   });
 
   server.on("/back", []() {
@@ -149,6 +196,8 @@ TEMP END
 
 }
 
+
 void loop() {
   server.handleClient();
 }
+*/
