@@ -1,7 +1,10 @@
 /*
  * Code for the ESP12-E microcontroller.
  * 
- *  1. establishes an access point.
+ *  1. connects to access point on esp32-joystick.
+ *     local ip: 192.168.4.100
+ *     gateway: 192.168.4.1 (esp32 remote control)
+ *     subnet: 255.255.0.0
  *  2. starts a webserver.
  *  3. waits on http requests and starts motors accordingly.
  * 
@@ -119,6 +122,14 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
   delay(100);
+
+  // it wil set the static IP address to 192, 168, 1, 184
+  IPAddress local_IP(192, 168, 4, 100);
+  IPAddress gateway(192, 168, 4, 1);
+  IPAddress subnet(255, 255, 0, 0);
+  if (!WiFi.config(local_IP, gateway, subnet)) {
+    Serial.println("STA Failed to configure");
+  }
   
   Serial.begin(115200);
   WiFi.begin(ssid, password);
