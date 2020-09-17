@@ -35,13 +35,8 @@ int steeringPower = 1023;
 // If the car is steering right when you press the left button, change this to LOW
 uint8_t steerDirection = HIGH;
 
-#ifndef APSSID
-#define APSSID "car_wifi"
-#define APPSK  "car"
-#endif
-
-const char *ssid = APSSID;
-const char *password = APPSK;
+const char *ssid = "Olafchen";
+const char *password = "lalalalala";
 
 ESP8266WebServer server(80);
 
@@ -126,7 +121,7 @@ void setup() {
   delay(100);
   
   Serial.begin(115200);
-  WiFi.begin("Olafchen", "lalalala");
+  WiFi.begin(ssid, password);
   Serial.println("");
 
   // Wait for connection
